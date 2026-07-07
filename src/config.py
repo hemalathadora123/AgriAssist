@@ -64,11 +64,26 @@ DEVICE = "cpu"      # change to "cuda" if you have NVIDIA GPU
 
 TOP_K = 5
 
-SEARCH_TYPE = "similarity"
+SEARCH_TYPE = "mmr"
 
 SEARCH_KWARGS = {
-    "k": TOP_K
+    "k": TOP_K,
+    "fetch_k": 20,
+    "lambda_mult": 0.7
 }
+# ==========================================================
+# GEMINI
+# ==========================================================
+
+GEMINI_TEMPERATURE = 0.2
+
+MAX_OUTPUT_TOKENS = 2048
+
+# ==========================================================
+# VECTOR DATABASE
+# ==========================================================
+
+AUTO_CREATE_VECTOR_DB = False
 
 # ==========================================================
 # LLM

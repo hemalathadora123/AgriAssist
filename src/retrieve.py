@@ -4,14 +4,14 @@ retrieve.py
 Loads an existing ChromaDB and retrieves
 relevant chunks for a given query.
 """
-
+from config import SEARCH_TYPE, SEARCH_KWARGS
 from typing import List
 
 from langchain_core.documents import Document
 
 from logger import get_logger
 from vector_store import VectorStoreManager
-from config import SEARCH_KWARGS
+
 
 logger = get_logger(__name__)
 
@@ -27,12 +27,8 @@ class Retriever:
         self.db = manager.load()
 
         self.retriever = self.db.as_retriever(
-            search_type="mmr",
-            search_kwargs={
-                "k": 5,
-                "fetch_k": 20,
-                "lambda_mult": 0.7
-            }
+            search_type=SEARCH_TYPE,
+            search_kwargs=SEARCH_KWARGS
         )
 
         logger.info("Retriever Ready.")
