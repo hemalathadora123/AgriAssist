@@ -8,3 +8,4 @@ transformers
 torch
 accelerate
 requests
+streamlit==1.59.0
