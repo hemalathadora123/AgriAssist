@@ -39,6 +39,9 @@ st.set_page_config(
 def load_pipeline():
     return RAGPipeline()
 
+from download_vectordb import download_database
+
+download_database()
 rag = load_pipeline()
 history_db = ChatHistoryManager()
 
