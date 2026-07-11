@@ -42,7 +42,7 @@ def load_pipeline():
 
 from download_vectordb import download_database
 print("========== BEFORE DOWNLOAD ==========")
-download_database()
+#download_database()
 print("========== AFTER DOWNLOAD ==========")
 rag = load_pipeline()
 history_db = ChatHistoryManager()
