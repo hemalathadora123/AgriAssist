@@ -53,7 +53,8 @@ history/*.sqlite3
 # Streamlit Cache
 # ==========================================================
 
-.streamlit/
+.streamlit/secrets.toml
+.streamlit/cache
 
 # ==========================================================
 # Pytest
