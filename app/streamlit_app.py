@@ -44,7 +44,7 @@ from download_vectordb import download_database
 print("========== BEFORE DOWNLOAD ==========")
 #download_database()
 print("========== AFTER DOWNLOAD ==========")
-rag = None
+rag = load_pipeline()
 history_db = ChatHistoryManager()
 
 # -----------------------------
