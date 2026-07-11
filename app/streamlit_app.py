@@ -1,3 +1,4 @@
+print("========== STREAMLIT APP STARTED ==========")
 import sys
 import time
 from pathlib import Path
@@ -40,8 +41,9 @@ def load_pipeline():
     return RAGPipeline()
 
 from download_vectordb import download_database
-
+print("========== BEFORE DOWNLOAD ==========")
 download_database()
+print("========== AFTER DOWNLOAD ==========")
 rag = load_pipeline()
 history_db = ChatHistoryManager()
 
