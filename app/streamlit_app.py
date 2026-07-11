@@ -37,14 +37,22 @@ st.set_page_config(
 # ---------------------------------------------
 
 @st.cache_resource
-def load_pipeline():
+def get_pipeline():
+    print("Loading RAG Pipeline...")
     return RAGPipeline()
 
 from download_vectordb import download_database
+
 print("========== BEFORE DOWNLOAD ==========")
-#download_database()
+
+# Keep this disabled until deployment works
+# download_database()
+
 print("========== AFTER DOWNLOAD ==========")
-rag = load_pipeline()
+
+# DO NOT create the pipeline here.
+# It will be created only when the first question is asked.
+
 history_db = ChatHistoryManager()
 
 # -----------------------------
@@ -238,6 +246,10 @@ if question:
         st.markdown(question)
 
     start = time.time()
+
+    with st.spinner("Initializing AgriAssist..."):
+
+        rag = get_pipeline()
 
     with st.spinner("Searching agricultural knowledge..."):
 
