@@ -15,7 +15,6 @@ sys.path.insert(0, str(SRC_DIR))
 import streamlit as st
 
 from history import ChatHistoryManager
-from rag_pipeline import RAGPipeline
 from config import (
     APP_TITLE,
     LLM_MODEL,
@@ -38,17 +37,10 @@ st.set_page_config(
 
 @st.cache_resource
 def get_pipeline():
+    from rag_pipeline import RAGPipeline
+
     print("Loading RAG Pipeline...")
     return RAGPipeline()
-
-from download_vectordb import download_database
-
-print("========== BEFORE DOWNLOAD ==========")
-
-# Keep this disabled until deployment works
-# download_database()
-
-print("========== AFTER DOWNLOAD ==========")
 
 # DO NOT create the pipeline here.
 # It will be created only when the first question is asked.

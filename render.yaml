@@ -10,6 +10,7 @@ services:
     buildCommand: |
       pip install --upgrade pip
       pip install -r requirements.txt
+      bash render_setup.sh
 
     startCommand: streamlit run app/streamlit_app.py --server.port=$PORT --server.address=0.0.0.0 --server.headless=true --server.enableCORS=false --server.enableXsrfProtection=false --server.enableWebsocketCompression=false
 
@@ -18,3 +19,9 @@ services:
         value: "3.11.9"
       - key: GEMINI_API_KEY
         sync: false
+      - key: OMP_NUM_THREADS
+        value: "1"
+      - key: TOKENIZERS_PARALLELISM
+        value: "false"
+      - key: HF_HUB_DISABLE_TELEMETRY
+        value: "1"
