@@ -9,6 +9,7 @@ services:
 
     buildCommand: |
       pip install --upgrade pip
+      pip install torch --extra-index-url https://download.pytorch.org/whl/cpu
       pip install -r requirements.txt
       bash render_setup.sh
 
