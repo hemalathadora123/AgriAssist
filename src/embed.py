@@ -3,16 +3,17 @@ embed.py
 
 Loads embedding model and prepares documents for vector storage.
 
-Project : AgriAssist
+Uses FastEmbed (ONNX) instead of PyTorch so the app fits on
+Render's free tier (~512MB RAM).
 """
 
 from typing import List, Tuple
 
 from langchain_core.documents import Document
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.embeddings import FastEmbedEmbeddings
 
 from chunking import create_chunks
-from config import EMBEDDING_MODEL, DEVICE
+from config import EMBEDDING_MODEL
 from logger import get_logger
 
 logger = get_logger(__name__)
@@ -20,23 +21,19 @@ logger = get_logger(__name__)
 
 class EmbeddingModel:
     """
-    Wrapper around HuggingFace embedding model.
+    Wrapper around FastEmbed MiniLM embeddings.
     """
 
     def __init__(self):
 
         logger.info("=" * 60)
-        logger.info("Loading Embedding Model")
+        logger.info("Loading Embedding Model (FastEmbed)")
         logger.info("=" * 60)
 
-        self.model = HuggingFaceEmbeddings(
+        self.model = FastEmbedEmbeddings(
             model_name=EMBEDDING_MODEL,
-            model_kwargs={
-                "device": DEVICE
-            },
-            encode_kwargs={
-                "normalize_embeddings": True
-            }
+            batch_size=32,
+            parallel=1,
         )
 
         logger.info(f"Embedding Model : {EMBEDDING_MODEL}")
@@ -47,7 +44,7 @@ class EmbeddingModel:
 
 
 def prepare_embeddings() -> Tuple[
-    HuggingFaceEmbeddings,
+    FastEmbedEmbeddings,
     List[Document]
 ]:
     """

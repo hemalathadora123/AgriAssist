@@ -54,9 +54,10 @@ CHUNK_OVERLAP = 200
 # EMBEDDING MODEL
 # ==========================================================
 
+# FastEmbed uses the same MiniLM model without PyTorch
 EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 
-DEVICE = "cpu"      # change to "cuda" if you have NVIDIA GPU
+DEVICE = "cpu"      # unused with FastEmbed; kept for local scripts
 
 # ==========================================================
 # RETRIEVAL

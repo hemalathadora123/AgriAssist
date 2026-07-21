@@ -12,6 +12,7 @@ from langchain_chroma import Chroma
 from config import (
     VECTOR_DB_DIR,
     COLLECTION_NAME,
+    AUTO_CREATE_VECTOR_DB,
 )
 
 from embed import EmbeddingModel
@@ -70,6 +71,14 @@ class VectorStoreManager:
             )
 
         logger.info("Vector Database Not Found.")
+
+        if not AUTO_CREATE_VECTOR_DB:
+            raise FileNotFoundError(
+                f"Vector database not found at {VECTOR_DB_DIR}. "
+                "Download it first (download_database) or enable "
+                "AUTO_CREATE_VECTOR_DB for local rebuilds."
+            )
+
         logger.info("Building New Vector Database...")
 
         documents = load_documents()

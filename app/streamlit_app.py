@@ -37,7 +37,11 @@ st.set_page_config(
 
 @st.cache_resource
 def get_pipeline():
+    from download_vectordb import download_database
     from rag_pipeline import RAGPipeline
+
+    print("Downloading vector database (if needed)...")
+    download_database()
 
     print("Loading RAG Pipeline...")
     return RAGPipeline()
@@ -239,13 +243,20 @@ if question:
 
     start = time.time()
 
-    with st.spinner("Initializing AgriAssist..."):
+    try:
+        with st.spinner("Initializing AgriAssist (first question can take 1–2 min)..."):
+            rag = get_pipeline()
 
-        rag = get_pipeline()
+        with st.spinner("Searching agricultural knowledge..."):
+            result = rag.ask(question)
 
-    with st.spinner("Searching agricultural knowledge..."):
-
-        result = rag.ask(question)
+    except Exception as e:
+        st.error(
+            "AgriAssist failed to answer this question. "
+            "Check Render logs for details."
+        )
+        st.exception(e)
+        st.stop()
 
     elapsed = round(time.time() - start, 2)
 

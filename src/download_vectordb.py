@@ -1,16 +1,26 @@
+"""
+download_vectordb.py
+
+Downloads the prebuilt Chroma vector database for Render / cloud deploys.
+"""
+
 import os
 import zipfile
-import requests
+from pathlib import Path
 
-from config import VECTOR_DB_DIR
+import gdown
+
+from config import VECTOR_DB_DIR, PROJECT_ROOT
 from logger import get_logger
 
 logger = get_logger(__name__)
 
-# Replace with your direct downlo
-VECTOR_DB_URL = "https://drive.google.com/uc?export=download&id=1QVur0lzolEfiY7X2gypSL044vb_DIAfd"
+VECTOR_DB_FILE_ID = "1QVur0lzolEfiY7X2gypSL044vb_DIAfd"
+VECTOR_DB_URL = f"https://drive.google.com/uc?id={VECTOR_DB_FILE_ID}"
+
 
 def download_database():
+    """Download and extract vectordb.zip if chroma.sqlite3 is missing."""
 
     if (VECTOR_DB_DIR / "chroma.sqlite3").exists():
         logger.info("Vector database already exists.")
@@ -18,26 +28,27 @@ def download_database():
 
     logger.info("Downloading Vector Database...")
 
-    zip_path = "vectordb.zip"
+    zip_path = PROJECT_ROOT / "vectordb.zip"
 
     try:
-        response = requests.get(VECTOR_DB_URL, stream=True)
-        response.raise_for_status()
+        gdown.download(
+            VECTOR_DB_URL,
+            str(zip_path),
+            quiet=False,
+        )
 
-        with open(zip_path, "wb") as f:
-            for chunk in response.iter_content(chunk_size=8192):
-                if chunk:
-                    f.write(chunk)
+        if not zip_path.exists() or zip_path.stat().st_size < 1000:
+            raise RuntimeError(
+                "Vector DB download failed or returned an empty file. "
+                "Check that the Google Drive link is public."
+            )
 
         logger.info("Extracting Vector Database...")
 
         with zipfile.ZipFile(zip_path, "r") as zip_ref:
-            zip_ref.extractall()
+            zip_ref.extractall(PROJECT_ROOT)
 
-        # ===== DEBUG =====
         logger.info(f"VECTOR_DB_DIR = {VECTOR_DB_DIR}")
-        logger.info(f"Project root contents: {os.listdir('.')}")
-
         logger.info(
             f"Vector DB exists? {(VECTOR_DB_DIR / 'chroma.sqlite3').exists()}"
         )
@@ -46,9 +57,14 @@ def download_database():
             logger.info(
                 f"Vector DB folder contents: {os.listdir(VECTOR_DB_DIR)}"
             )
-        # ================
 
-        os.remove(zip_path)
+        zip_path.unlink(missing_ok=True)
+
+        if not (VECTOR_DB_DIR / "chroma.sqlite3").exists():
+            raise FileNotFoundError(
+                "Extracted archive but chroma.sqlite3 was not found. "
+                "Check the zip layout."
+            )
 
         logger.info("Vector Database Ready.")
 
