@@ -1,0 +1,17 @@
+[server]
+headless = true
+enableCORS = false
+enableXsrfProtection = false
+enableWebsocketCompression = false
+fileWatcherType = "none"
+runOnSave = false
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+primaryColor = "#10b981"
+backgroundColor = "#0b1612"
+secondaryBackgroundColor = "#12251e"
+textColor = "#ecfdf5"
+font = "sans serif"
